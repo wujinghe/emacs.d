@@ -29,6 +29,15 @@
                          (directory-files "~/.emacs.d/site-lisp/")))
            load-path))))
 
+(defvar my-org-fonts-to-ignore
+  '(org-verbatim
+    org-block-begin-line
+    org-meta-line
+    org-tag
+    org-link
+    org-table
+    org-level-1
+    org-document-info))
 ;; {{ copied from http://ergoemacs.org/emacs/elisp_read_file_content.html
 (defun get-string-from-file (file)
   "Return FILE's content."
@@ -53,15 +62,19 @@
     (add-to-list 'auto-mode-alist (cons pattern mode))))
 
 
-(defun font-belongs-to (pos fonts)
+(defun my-font-belongs-to (pos fonts)
   "Current font at POS belongs to FONTS."
-  (let* ((fontfaces (get-text-property pos 'face)))
-    (when (not (listp fontfaces))
-      (setf fontfaces (list fontfaces)))
-    (delq nil
-          (mapcar (lambda (f)
-                    (member f fonts))
-                  fontfaces))))
+  (let* ((fontfaces (get-text-property pos 'face))
+         rlt)
+    (unless (listp fontfaces)
+      (setq fontfaces (list fontfaces)))
+    (setq rlt
+          (delq nil
+                (mapcar (lambda (f)
+                          (member f fonts))
+                        fontfaces)))
+    (message "rlt=%s pos=%s fontfaces=%s" rlt pos fontfaces)
+    rlt))
 
 ;;----------------------------------------------------------------------------
 ;; String utilities missing from core emacs

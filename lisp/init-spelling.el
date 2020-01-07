@@ -9,28 +9,28 @@
   '(progn
      ;; {{ flyspell setup for web-mode
      (defun web-mode-flyspell-verify ()
-       (let* ((f (get-text-property (- (point) 1) 'face))
+       (let* ((pos (- (point) 1))
               rlt)
          (cond
           ;; Check the words with these font faces, possibly.
           ;; This *blacklist* will be tweaked in next condition
-          ((not (memq f '(web-mode-html-attr-value-face
-                          web-mode-html-tag-face
-                          web-mode-html-attr-name-face
-                          web-mode-constant-face
-                          web-mode-doctype-face
-                          web-mode-keyword-face
-                          web-mode-comment-face ;; focus on get html label right
-                          web-mode-function-name-face
-                          web-mode-variable-name-face
-                          web-mode-css-property-name-face
-                          web-mode-css-selector-face
-                          web-mode-css-color-face
-                          web-mode-type-face
-                          web-mode-block-control-face)))
+          ((not (my-font-belongs-to pos '(web-mode-html-attr-value-face
+                                          web-mode-html-tag-face
+                                          web-mode-html-attr-name-face
+                                          web-mode-constant-face
+                                          web-mode-doctype-face
+                                          web-mode-keyword-face
+                                          web-mode-comment-face ;; focus on get html label right
+                                          web-mode-function-name-face
+                                          web-mode-variable-name-face
+                                          web-mode-css-property-name-face
+                                          web-mode-css-selector-face
+                                          web-mode-css-color-face
+                                          web-mode-type-face
+                                          web-mode-block-control-face)))
            (setq rlt t))
           ;; check attribute value under certain conditions
-          ((memq f '(web-mode-html-attr-value-face))
+          ((my-font-belongs-to pos '(web-mode-html-attr-value-face))
            (save-excursion
              (search-backward-regexp "=['\"]" (line-beginning-position) t)
              (backward-char)
@@ -196,14 +196,6 @@ back to hunspell if aspell is not found.")
               (let* ((begin-regexp "^[ \t]*#\\+begin_\\(src\\|html\\|latex\\|example\\|quote\\)")
                      (end-regexp "^[ \t]*#\\+end_\\(src\\|html\\|latex\\|example\\|quote\\)")
                      (case-fold-search t)
-                     (ignored-font-faces '(org-verbatim
-                                           org-block-begin-line
-                                           org-meta-line
-                                           org-tag
-                                           org-link
-                                           org-table
-                                           org-level-1
-                                           org-document-info))
                      (rlt t)
                      ff
                      th
@@ -211,13 +203,9 @@ back to hunspell if aspell is not found.")
                 (save-excursion
                   (goto-char start)
 
-                  ;; get current font face
-                  (setq ff (get-text-property start 'face))
-                  (if (listp ff) (setq ff (car ff)))
-
                   ;; ignore certain errors by set rlt to nil
                   (cond
-                   ((memq ff ignored-font-faces)
+                   ((my-font-belongs-to (point) my-org-fonts-to-ignore)
                     ;; check current font face
                     (setq rlt nil))
                    ((or (string-match "^ *- $" (buffer-substring (line-beginning-position) (+ start 2)))
@@ -239,7 +227,6 @@ back to hunspell if aspell is not found.")
                     (setq b (re-search-backward begin-regexp nil t))
                     (if b (setq e (re-search-forward end-regexp nil t)))
                     (if (and b e (< start e)) (setq rlt nil)))))
-                ;; (if rlt (message "start=%s end=%s ff=%s" start end ff))
                 rlt)))))
 ;; }}
 

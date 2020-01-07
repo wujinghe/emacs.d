@@ -136,9 +136,12 @@ It's value could be customized liked \"/usr/bin/firefox\".
      ;; Please note flyspell only use ispell-word
      (defadvice org-mode-flyspell-verify (after org-mode-flyspell-verify-hack activate)
        (let* ((run-spellcheck ad-return-value))
+         (message "=========1")
          (when run-spellcheck
            (cond
             ((org-mode-is-code-snippet)
+             (setq run-spellcheck nil))
+            ((my-font-belongs-to (point) my-org-fonts-to-ignore)
              (setq run-spellcheck nil))
             ((org-mode-current-line-is-property)
              (setq run-spellcheck nil))))
