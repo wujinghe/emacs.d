@@ -38,7 +38,11 @@
   ;;   if(1) // press ENTER here, zero means no indentation
   (fix-c-indent-offset-according-to-syntax-context 'substatement 0)
   ;;   void fn() // press ENTER here, zero means no indentation
-  (fix-c-indent-offset-according-to-syntax-context 'func-decl-cont 0))
+  (fix-c-indent-offset-according-to-syntax-context 'func-decl-cont 0)
+
+  ;; wjh add
+  (fix-c-indent-offset-according-to-syntax-context 'innamespace 0)
+  (fix-c-indent-offset-according-to-syntax-context 'inline-open 0))
 
 (defun my-c-mode-setup ()
   "C/C++ only setup."
@@ -87,5 +91,8 @@
       ;; so below code is NOT needed.
       (eldoc-mode 1))))
 (add-hook 'c-mode-common-hook 'c-mode-common-hook-setup)
+
+;; wjh add
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 
 (provide 'init-cc-mode)

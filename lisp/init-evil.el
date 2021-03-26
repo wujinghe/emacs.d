@@ -492,7 +492,11 @@ If the character before and after CH is space or tab, CH is NOT slash"
   "gf" 'counsel-git ; find file
   "gg" 'my-counsel-git-grep ; quickest grep should be easy to press
   "gd" 'ffip-show-diff-by-description ;find-file-in-project 5.3.0+
-  "gt" 'my-evil-goto-definition ; "gt" is occupied by evil
+  ;"gt" 'my-evil-goto-definition ; "gt" is occupied by evil
+  "gt" 'counsel-gtags-dwim
+  "gr" 'counsel-gtags-find-symbol
+  "gu" 'counsel-gtags-update-tags
+  "gb" 'counsel-gtags-pop
   "gl" 'my-git-log-trace-definition ; find history of a function or range
   "sh" 'my-select-from-search-text-history
   "rjs" 'run-js
