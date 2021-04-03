@@ -112,9 +112,9 @@
   (require-init 'init-hippie-expand)
   (require-init 'init-windows)
   (require-init 'init-markdown t)
-  (require-init 'init-javascript t)
+  ;(require-init 'init-javascript t)
   (require-init 'init-org t)
-  (require-init 'init-css t)
+  ;(require-init 'init-css t)
   (require-init 'init-python t)
   (require-init 'init-lisp t)
   (require-init 'init-elisp t)
@@ -126,17 +126,17 @@
   (require-init 'init-gtags t)
   (require-init 'init-clipboard)
   (require-init 'init-ctags t)
-  (require-init 'init-bbdb t)
-  (require-init 'init-gnus t)
+  ;(require-init 'init-bbdb t)
+  ;(require-init 'init-gnus t)
   (require-init 'init-lua-mode t)
-  (require-init 'init-workgroups2 t) ; use native API in lightweight mode
+  ;(require-init 'init-workgroups2 t) ; use native API in lightweight mode
   (require-init 'init-term-mode t)
-  (require-init 'init-web-mode t)
+  ;(require-init 'init-web-mode t)
   (require-init 'init-company t)
   ;(require-init 'init-chinese t) ;; cannot be idle-required
   ;; need statistics of keyfreq asap
   (require-init 'init-keyfreq t)
-  (require-init 'init-httpd t)
+  ;(require-init 'init-httpd t)
 
   ;; projectile costs 7% startup time
 
@@ -147,10 +147,10 @@
   ;; misc has some crucial tools I need immediately
   (require-init 'init-essential)
   ;; handy tools though not must have
-  (require-init 'init-misc t)
+  ;(require-init 'init-misc t)
 
-  (require-init 'init-emacs-w3m t)
-  (require-init 'init-shackle t)
+  ;(require-init 'init-emacs-w3m t)
+  ;(require-init 'init-shackle t)
   (require-init 'init-dired t)
   (require-init 'init-writting t)
   (require-init 'init-hydra) ; hotkey is required everywhere
@@ -159,7 +159,7 @@
 
   ;; ediff configuration should be last so it can override
   ;; the key bindings in previous configuration
-  (require-init 'init-ediff)
+  ;(require-init 'init-ediff)
 
   ;; @see https://github.com/hlissner/doom-emacs/wiki/FAQ
   ;; Adding directories under "site-lisp/" to `load-path' slows
@@ -189,3 +189,132 @@
 (put 'erase-buffer 'disabled nil)
 
 (setq neo-window-width 55)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Set up code completion with company
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defvar my:byte-compile-init t)
+(defvar my:use-prescient t)
+
+(mapc #'(lambda (add) (add-to-list 'load-path add))
+      (eval-when-compile
+        (require 'package)
+        ;(package-initialize)
+        ;; Install use-package if not installed yet.
+        (unless (package-installed-p 'use-package)
+          (package-refresh-contents)
+          (package-install 'use-package))
+        ;; (require 'use-package)
+        (let ((package-user-dir-real (file-truename package-user-dir)))
+          ;; The reverse is necessary, because outside we mapc
+          ;; add-to-list element-by-element, which reverses.
+          (nreverse
+           (apply #'nconc
+                  ;; Only keep package.el provided loadpaths.
+                  (mapcar #'(lambda (path)
+                              (if (string-prefix-p package-user-dir-real path)
+                                  (list path)
+                                nil))
+                          load-path))))))
+
+;; (use-package company
+;;   :ensure t
+;;   :diminish company-mode
+;;   ;:hook (prog-mode . global-company-mode)
+;;   :commands (company-mode company-indent-or-complete-common)
+;;   :init
+;;   (setq company-minimum-prefix-length 2
+;;         company-tooltip-limit 14
+;;         company-tooltip-align-annotations t
+;;         company-require-match 'never
+;;         company-global-modes '(not erc-mode message-mode help-mode gud-mode)
+
+;;         ;; These auto-complete the current selection when
+;;         ;; `company-auto-complete-chars' is typed. This is too magical. We
+;;         ;; already have the much more explicit RET and TAB.
+;;         company-auto-complete nil
+;;         company-auto-complete-chars nil
+
+;;         ;; Only search the current buffer for `company-dabbrev' (a backend that
+;;         ;; suggests text your open buffers). This prevents Company from causing
+;;         ;; lag once you have a lot of buffers open.
+;;         company-dabbrev-other-buffers nil
+
+;;         ;; Make `company-dabbrev' fully case-sensitive, to improve UX with
+;;         ;; domain-specific words with particular casing.
+;;         company-dabbrev-ignore-case nil
+;;         company-dabbrev-downcase nil)
+
+;;   :config
+;;   (defvar my:company-explicit-load-files '(company company-capf))
+;;   (when my:byte-compile-init
+;;     (dolist (company-file my:company-explicit-load-files)
+;;       (require company-file)))
+;;   ;; Zero delay when pressing tab
+;;   (setq company-idle-delay 0)
+;;   ;; remove backends for packages that are dead
+;;   (setq company-backends (delete 'company-eclim company-backends))
+;;   (setq company-backends (delete 'company-clang company-backends))
+;;   (setq company-backends (delete 'company-xcode company-backends))
+;;   )
+
+;; Use prescient for sorting results with company:
+;; https://github.com/raxod502/prescient.el
+;; (when my:use-prescient
+;;   (use-package company-prescient
+;;     :ensure t
+;;     :after company
+;;     :config
+;;     (company-prescient-mode t)
+;;     (prescient-persist-mode t)
+;;     )
+;;   )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Configure flycheck
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Note: For C++ we use flycheck with LSP mode
+
+(use-package lsp-java
+  :init
+  (defun jmi/java-mode-config ()
+    (setq-local tab-width 4
+                c-basic-offset 4)
+    (toggle-truncate-lines 1)
+    (setq-local tab-width 4)
+    (setq-local c-basic-offset 4)
+    (lsp))
+
+  :config
+  ;; Enable dap-java
+  (require 'dap-java)
+
+  ;; Support Lombok in our projects, among other things
+  (setq lsp-java-vmargs
+        (list "-noverify"
+              "-Xmx2G"
+              "-XX:+UseG1GC"
+              "-XX:+UseStringDeduplication"
+              (concat "-javaagent:" jmi/lombok-jar)
+              (concat "-Xbootclasspath/a:" jmi/lombok-jar))
+        lsp-file-watch-ignored
+        '(".idea" ".ensime_cache" ".eunit" "node_modules" ".git" ".hg" ".fslckout" "_FOSSIL_"
+          ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "build")
+
+        lsp-java-import-order '["" "java" "javax" "#"]
+        ;; Don't organize imports on save
+        lsp-java-save-action-organize-imports nil
+
+        ;; Formatter profile
+        lsp-java-format-settings-url (concat "file://" jmi/java-format-settings-file)
+        lsp-enable-on-type-formatting t
+        lsp-enable-indentation t)
+  (setq lsp-java-server-install-dir "/home/wujinghe/opt/jdtls")
+
+  :hook (java-mode . jmi/java-mode-config)
+
+  :demand t
+  :after (lsp lsp-mode dap-mode jmi-init-platform-paths))
+
+(setq lsp-restart 'auto-restart)

@@ -15,7 +15,7 @@
   '(ace-window ; lastest stable is released on year 2014
     auto-package-update
     nov
-    bbdb
+    ;bbdb
     native-complete
     company-native-complete
     flymake-shellcheck ; check shell script
@@ -40,8 +40,8 @@
     ;; }}
     iedit
     undo-tree
-    js-doc
-    jss ; remote debugger of browser
+    ;js-doc
+    ;jss ; remote debugger of browser
     ;; {{ since stable v0.13.0 released, we go back to stable version
     ;; ivy
     ;; counsel
@@ -80,16 +80,16 @@
     tao-theme
     ;; }}
     slime
-    groovy-mode
+    ;groovy-mode
     company ; I won't wait another 2 years for stable
-    simple-httpd
+    ;simple-httpd
     dsvn
     findr
     mwe-log-commands
     noflet
     db
     creole
-    web
+    ;web
     buffer-move
     regex-tool
     legalese
@@ -106,7 +106,7 @@
     keyfreq
     gitconfig-mode
     textile-mode
-    w3m
+    ;w3m
     workgroups2
     zoutline
     company-c-headers
@@ -265,21 +265,21 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
 (require-package 'winum)
 (require-package 'session)
 (require-package 'unfill)
-(require-package 'w3m)
+;(require-package 'w3m)
 (require-package 'counsel-gtags)
 (require-package 'buffer-move)
 (require-package 'ace-window)
 (require-package 'cmake-mode)
 (require-package 'cpputils-cmake)
-(require-package 'bbdb)
-(require-package 'pomodoro)
+;(require-package 'bbdb)
+;(require-package 'pomodoro)
 (require-package 'flymake-lua)
 ;; rvm-open-gem to get gem's code
 (require-package 'rvm)
 ;; C-x r l to list bookmarks
 (require-package 'multi-term)
-(require-package 'js-doc)
-(require-package 'js2-mode)
+;(require-package 'js-doc)
+;(require-package 'js2-mode)
 (require-package 'rjsx-mode)
 (require-package 'tagedit)
 (require-package 'git-link)
@@ -299,13 +299,13 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
 (require-package 'neotree)
 (require-package 'hydra)
 (require-package 'ivy-hydra) ; @see https://oremacs.com/2015/07/23/ivy-multiaction/
-(require-package 'pyim-basedict) ; it's default pyim dictionary
-(require-package 'web-mode)
-(require-package 'emms)
+;(require-package 'pyim-basedict) ; it's default pyim dictionary
+;(require-package 'web-mode)
+;(require-package 'emms)
 (require-package 'iedit)
 (require-package 'bash-completion)
-(require-package 'websocket) ; for debug debugging of browsers
-(require-package 'jss)
+;(require-package 'websocket) ; for debug debugging of browsers
+;(require-package 'jss)
 (require-package 'undo-tree)
 (require-package 'evil)
 (require-package 'evil-escape)
@@ -333,7 +333,7 @@ You still need modify `package-archives' in \"init-elpa.el\" to PERMANENTLY use 
 (require-package 'seq)
 (require-package 'visual-regexp) ;; Press "M-x vr-*"
 (require-package 'vimrc-mode)
-(require-package 'nov) ; read epub
+;(require-package 'nov) ; read epub
 (require-package 'rust-mode)
 (require-package 'benchmark-init)
 (require-package 'langtool) ; check grammar
